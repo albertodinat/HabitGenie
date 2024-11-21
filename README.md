@@ -9,36 +9,37 @@ Welcome to the Habit Tracker App! Below are some screenshots showcasing its key 
 ### **1. Login Screen**
 A sleek and intuitive Login screen.
 
-<img src="https://github.com/user-attachments/assets/f3e073b0-3fa1-4009-9361-595cd77fa400" alt="Home Screen" width="300" />
-<img src="https://github.com/user-attachments/assets/e67b26eb-effd-44e4-8c94-2fc9cb2ef353" alt="Home Screen" width="300" />
+<img src="https://github.com/user-attachments/assets/ea7e453d-f5f5-4277-a950-c80d1524e854" alt="Home Screen" width="300" />
+<img src="https://github.com/user-attachments/assets/5e9c4d6a-74a2-4520-a1d6-b997d7ed2497" alt="Home Screen" width="300" />
 
 ---
 
 ### **2. Home Screen**
 A sleek and intuitive home screen that helps users track their daily habits at a glance.
 
-<img src="https://github.com/user-attachments/assets/b321be28-55f6-4b68-a0ab-38c2a2b437a6" alt="Add Habit Screen" width="300" />
+<img src="https://github.com/user-attachments/assets/b1c579ff-182e-4454-a4a9-bbb925aa9083" alt="Add Habit Screen" width="300" />
+
 
 ---
 
 ### **3. Habit Calendar Screen**
 Retrieve details of all habits tracked for a specific date.
 
-<img src="https://github.com/user-attachments/assets/baa84654-7286-4d9a-ac28-5676cf44d365" alt="Habit Details Screen" width="300" />
+<img src="https://github.com/user-attachments/assets/e4b55421-3634-44ab-9633-9e46ef8a843e" alt="Habit Details Screen" width="300" />
 
 ---
 
 ### **4. Settings Screen**
 Customize your experience with a variety of settings.
 
-<img src="https://github.com/user-attachments/assets/0dbd8b5a-ad58-4cfd-ab61-061f634b0c24" alt="Settings Screen" width="300" />
+<img src="https://github.com/user-attachments/assets/8affa2f2-792b-4fcc-8b3c-ab88d15b3192" alt="Settings Screen" width="300" />
 
 ---
 
 ### **5. Daily Habits Screen**
 Track Daily Habits: *Monitor your progress and stay consistent*
 
-<img src="https://github.com/user-attachments/assets/4f441b6b-5897-4977-bb4d-00dfb09171a6" alt="Notifications Screen" width="300" />
+<img src="https://github.com/user-attachments/assets/d1d0f09a-205b-4568-912d-f4424e0c9b8c" alt="Notifications Screen" width="300" />
 
 ---
 
