@@ -17,8 +17,7 @@ A sleek and intuitive Login screen.
 ### **2. Home Screen**
 A sleek and intuitive home screen that helps users track their daily habits at a glance.
 
-<img src="https://github.com/user-attachments/assets/b1c579ff-182e-4454-a4a9-bbb925aa9083" alt="Add Habit Screen" width="300" />
-
+<img src="https://github.com/user-attachments/assets/cd1f421f-96ac-4e03-bea5-2001edc20adc" alt="Add Habit Screen" width="300" />
 
 ---
 
