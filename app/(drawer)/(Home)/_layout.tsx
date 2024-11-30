@@ -34,8 +34,6 @@ export default function TabLayout() {
       <Tabs
         screenOptions={{
           tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-          // Disable the static render of the header on web
-          // to prevent a hydration error in React Navigation v6.
           headerShown: false,
           tabBarStyle: {
             // backgroundColor:'#161632',
@@ -66,20 +64,6 @@ export default function TabLayout() {
             title: "Home",
             tabBarIcon: ({ color }) => (
               <FontAwesome name="home" size={30} color={color} />
-            ),
-            headerRight: () => (
-              <Link href="/modalcopy" asChild>
-                <Pressable>
-                  {({ pressed }) => (
-                    <FontAwesome
-                      name="info-circle"
-                      size={25}
-                      color={Colors[colorScheme ?? "light"].text}
-                      style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                    />
-                  )}
-                </Pressable>
-              </Link>
             ),
             tabBarActiveTintColor: "#88D498",
             tabBarInactiveTintColor: "#EEE7D3",

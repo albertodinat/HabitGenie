@@ -1,4 +1,4 @@
-import { Animated, StyleSheet, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { Text, View } from "../../../components/Themed";
 import React, { useEffect, useState } from "react";
 import { auth } from "../../../firebase.config";
@@ -10,7 +10,6 @@ import { AntDesign } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { LiquidGauge } from "react-native-liquid-gauge";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
-import { StatusBar } from "react-native";
 import { useDate } from "../../Contexts/GlobalDateContext"; // Import the useDate hook
 
 export default function TabOneScreen() {
@@ -38,11 +37,11 @@ export default function TabOneScreen() {
   };
 
   return (
-    <SafeAreaView className="h-full bg-secondary">
+    <View className="h-full bg-secondary py-5">
       {user && (
-        <View className="flex flex-col items-center justify-center w-full h-full gap-y-6 bg-secondary">
-          <View className="w-full px-4 flex flex-row items-start justify-center bg-transparent shadow-md shadow-black">
-            <View className="rounded-2xl w-1/2 h-12 bg-primary mr-4 relative flex flex-row items-center justify-center">
+        <View className="items-center justify-center h-full bg-secondary gap-y-4">
+          <View className="w-full px-4 flex flex-row items-start justify-center bg-transparent shadow-md shadow-black py-3 gap-x-4">
+            <View className="rounded-2xl w-1/2 h-12 bg-primary flex-row items-center">
               <TouchableOpacity
                 className="flex items-center justify-center w-full relative"
                 onPress={() => setDateVisibility(true)}
@@ -85,7 +84,7 @@ export default function TabOneScreen() {
               )}
             </View>
 
-            <View className="w-1/2 h-12  text-secondary rounded-2xl">
+            <View className="w-1/2 h-12 bg-primary text-secondary rounded-2xl">
               <Select
                 placeholder="Select Habit"
                 selectedValue={selected}
@@ -131,6 +130,7 @@ export default function TabOneScreen() {
             alignItems="center"
             justifyContent="space-evenly"
             className="w-[95%] h-[85%] bg-primary rounded-3xl -z-20 shadow-md shadow-black"
+            padding={2}
           >
             <TouchableOpacity
               onPress={() => router.push("/(drawer)/(Home)/CalendarView")}
@@ -195,6 +195,6 @@ export default function TabOneScreen() {
           </Flex>
         </View>
       )}
-    </SafeAreaView>
+    </View>
   );
 }
