@@ -19,6 +19,8 @@ A sleek and intuitive home screen that helps users track their daily habits at a
 
 <img src="https://github.com/user-attachments/assets/cd1f421f-96ac-4e03-bea5-2001edc20adc" alt="Add Habit Screen" width="300" />
 
+https://github.com/user-attachments/assets/6a3716bf-20da-4352-82a2-f6e48b1a5c52
+
 ---
 
 ### **3. Habit Calendar Screen**
