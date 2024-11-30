@@ -22,15 +22,15 @@ const SignIn = () => {
   const handlePress = () => {
     setSignInClicked(true);
     if (email.length && password.length) {
-      handleSignUp();
+      handleSignIn();
     }
   };
 
-  const handleSignUp = () => {
+  const handleSignIn = () => {
     setIsLoading(true);
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
-        console.log("User account created & signed in!");
+        console.log("User signed in!");
         router.push("/(drawer)/(Home)/HomePage");
         setIsLoading(false);
       })
