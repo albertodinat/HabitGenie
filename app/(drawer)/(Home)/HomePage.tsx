@@ -11,12 +11,25 @@ import { router } from "expo-router";
 import { LiquidGauge } from "react-native-liquid-gauge";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import { useDate } from "../../Contexts/GlobalDateContext"; // Import the useDate hook
+import { getData } from "../../../utils/getCalendarViewData";
+import { Habit } from "../../interfaces/habits";
+
 
 export default function TabOneScreen() {
   const [selected, setSelected] = useState("");
   const { selectedDate, setSelectedDate } = useDate(); // Use global context
   const [datePickerVisibility, setDateVisibility] = useState(false);
   const [rand, setRand] = useState(Math.floor(Math.random() * 100));
+  const [habits, setHabits] = useState<Habit[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedHabit, setSelectedHabit] = useState<Habit | null>(null);
+  const [averagePercentage, setAveragePercentage] = useState(0);
+  const [completedHabits, setCompletedHabits] = useState(0);
+  
+  const fireGetData = async () => {
+    await getData(setHabits, setIsLoading, setAveragePercentage, setCompletedHabits, selectedDate);
+  };
 
   const data = [
     { key: "1", label: "Mobiles", value: "Mobiles", disabled: true },
@@ -30,7 +43,12 @@ export default function TabOneScreen() {
     const subscriber = auth.onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
   }, [auth]);
-
+  useEffect(() => {
+    if(!datePickerVisibility && selectedDate)
+      {
+        fireGetData();
+      }
+  },[selectedDate, datePickerVisibility])
   const onAuthStateChanged = (user: any) => {
     setUser(user);
     if (initializing) setInitializing(false);
@@ -153,11 +171,11 @@ export default function TabOneScreen() {
                     waveColor: "#132c27",
                     circleThickness: 0.2,
                     circleFillGap: 0.03,
-                    textVertPosition: rand * 0.01,
+                    textVertPosition: averagePercentage * 0.01,
                     waveAnimateTime: 1000,
                     textSize: 0,
                   }}
-                  value={rand}
+                  value={averagePercentage}
                   width={350}
                   height={350}
                 />
@@ -176,7 +194,7 @@ export default function TabOneScreen() {
                     waveAnimateTime: 1500,
                     waveOffset: 0.3,
                   }}
-                  value={rand}
+                  value={averagePercentage}
                   width={350}
                   height={350}
                 />
@@ -185,7 +203,7 @@ export default function TabOneScreen() {
                 <AnimatedCircularProgress
                   size={350}
                   width={30}
-                  fill={rand}
+                  fill={averagePercentage}
                   tintColor="#88D498"
                   backgroundColor="#607874"
                   rotation={0}

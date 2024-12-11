@@ -60,7 +60,7 @@ export default function TabTwoScreen() {
           }}
         />
       </Center>
-      
+
       <DailyProgressComponent
         averagePercentage={averagePercentage}
         completedHabits={completedHabits}
