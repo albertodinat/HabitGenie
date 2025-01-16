@@ -6,7 +6,7 @@ import { router } from 'expo-router'
 import { auth } from '../../firebase.config'
 import { Button } from 'native-base'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import Secrets from '../../Secrets.json';
+// import Secrets from '../../Secrets.json';
 
 
 const HeroPage = () => {
@@ -29,23 +29,23 @@ const HeroPage = () => {
     countPress++
     console.log("Pressed ", countPress, " Times")
     if (countPress >= 10) {
-      setIsLoading(true)
-      signInWithEmailAndPassword(auth, Secrets.ADMIN_EMAIL, Secrets.ADMIN_PASS)
-        .then(() => {
-          console.log("Admin signed in!");
-          router.push("/(drawer)/(Home)/HomePage");
-        })
-        .catch((error) => {
-          if (error.code === "auth/email-already-in-use") {
-            console.log("That email address is already in use!");
-          }
+      // setIsLoading(true)
+      // signInWithEmailAndPassword(auth, Secrets.ADMIN_EMAIL, Secrets.ADMIN_PASS)
+      //   .then(() => {
+      //     console.log("Admin signed in!");
+      //     router.push("/(drawer)/(Home)/HomePage");
+      //   })
+      //   .catch((error) => {
+      //     if (error.code === "auth/email-already-in-use") {
+      //       console.log("That email address is already in use!");
+      //     }
 
-          if (error.code === "auth/invalid-email") {
-            console.log("That email address is invalid!");
-          }
-          alert("Wrong email or password");
-          setIsLoading(false)
-        });
+      //     if (error.code === "auth/invalid-email") {
+      //       console.log("That email address is invalid!");
+      //     }
+      //     alert("Wrong email or password");
+      //     setIsLoading(false)
+      //   });
     }
   }
   useEffect(() => {
