@@ -16,7 +16,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.rijul_sarji.HabitTracker"
+      "googleServicesFile": "./google-services.json",
+      "package": "com.axzer0.HabitGenie"
     },
     "web": {
       "bundler": "metro",
