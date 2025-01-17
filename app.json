@@ -18,7 +18,7 @@
         "backgroundColor": "#ffffff"
       },
       "googleServicesFile": "./google-services.json",
-      "package": "com.team_carnage.habittracker"
+      "package": "com.axzer0.HabitGenie"
     },
     "web": {
       "bundler": "metro",
