@@ -42,3 +42,5 @@ expo-env.d.ts
 
 #Secrets
 Secrets.json
+google-services.json
+GoogleService-Info.plist
