@@ -80,6 +80,14 @@ function RootLayoutNav() {
               options={{ headerShown: false, animation: "fade" }}
             />
             <Stack.Screen
+              name="(orthophonist)"
+              options={{ headerShown: false, animation: "fade" }}
+            />
+            <Stack.Screen
+              name="(patient)"
+              options={{ headerShown: false, animation: "fade" }}
+            />
+            <Stack.Screen
               name="(Screens)/Profile"
               options={{
                 headerShown: false,
@@ -118,6 +126,10 @@ function RootLayoutNav() {
                 presentation: "containedModal",
                 animation: "slide_from_right",
               }}
+            />
+            <Stack.Screen
+              name="Stats"
+              options={{ headerShown: false }}
             />
             {/* <Stack.Screen name="(drawer)/(tabs)" options={{ headerShown: false }} /> */}
             <Stack.Screen name="modal" options={{ presentation: "modal" }} />
