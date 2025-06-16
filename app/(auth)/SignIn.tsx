@@ -9,15 +9,17 @@ import { IoIosArrowBack } from "react-icons/io";
 import { IoChevronBack } from "react-icons/io5";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { auth } from "../../firebase.config";
+import { auth, db } from "../../firebase.config";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [signInClicked, setSignInClicked] = useState(false);
+const [signInClicked, setSignInClicked] = useState(false);
+  const [infoMessage, setInfoMessage] = useState<string | null>(null);
 
   const handlePress = () => {
     setSignInClicked(true);
@@ -26,13 +28,29 @@ const SignIn = () => {
     }
   };
 
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
     setIsLoading(true);
+    setInfoMessage(null);
     signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        console.log("User signed in!");
-        router.push("/(drawer)/(Home)/HomePage");
-        setIsLoading(false);
+      .then(async (cred) => {
+        const user = cred.user;
+        try {
+          const snap = await getDoc(doc(db, 'users', user.uid));
+          const role = snap.data()?.role;
+          if (!role) {
+            setInfoMessage('No role assigned yet');
+            return;
+          }
+          if (role === 'orthophonist') {
+            router.replace('/(orthophonist)/Dashboard');
+          } else if (role === 'patient') {
+            router.replace('/(patient)/Dashboard');
+          } else {
+            setInfoMessage('Unknown role');
+          }
+        } finally {
+          setIsLoading(false);
+        }
       })
       .catch((error) => {
         if (error.code === "auth/email-already-in-use") {
@@ -79,6 +97,9 @@ const SignIn = () => {
       </View>
       <View className="mt-4 p-4 bg-[#EEE7D3] w-full h-full rounded-t-[60px]">
         <View className="mt-8">
+          {infoMessage && (
+            <Text className="text-red-500 mb-2 text-center">{infoMessage}</Text>
+          )}
           <TextInput
             label="Email Id"
             value={email}
