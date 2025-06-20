@@ -130,20 +130,18 @@ const CustomModal = ({
                         ? localHabit.completed_units.toString()
                         : ""
                     }
-                    onChange={(e) => {
-                      // TODO: need to fix this handling
-                      console.log("first", e.nativeEvent.text);
+                    onChangeText={(text) => {
+                      const value = parseInt(text, 10);
                       setLocalHabit((prev) => ({
                         ...prev,
-                        completed_units: !e.nativeEvent?.text
-                          ? 0
-                          : parseInt(e.nativeEvent.text),
+                        completed_units: Number.isNaN(value) ? 0 : value,
                       }));
                     }}
                     height={"100%"}
                     fontSize={20}
                     textAlign={"center"}
                     isInvalid={
+                      localHabit.completed_units < 0 ||
                       localHabit.completed_units > localHabit.total_units
                     }
                   />
@@ -182,7 +180,10 @@ const CustomModal = ({
               <Button
                 onPress={handleHabitLog}
                 isLoading={loading}
-                isDisabled={localHabit.completed_units > localHabit.total_units}
+                isDisabled={
+                  localHabit.completed_units < 0 ||
+                  localHabit.completed_units > localHabit.total_units
+                }
                 backgroundColor={"#1C3F39"}
                 width={"70%"}
                 marginLeft={4}
