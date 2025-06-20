@@ -111,13 +111,12 @@ export default function Dashboard() {
       <Button
         mode="contained"
         style={{ backgroundColor: '#1C3F39', marginTop: 10 }}
-        onPress={async () => {
-          const token = (await getDoc(doc(db, 'users', auth.currentUser?.uid || ''))).data()?.pushToken;
-          if (token) {
-            await sendPushNotification(token, 'Test', 'Ceci est une notification de test');
-            Alert.alert('Notification envoyée');
-          }
-        }}
+        onPress={() =>
+          Notifications.scheduleNotificationAsync({
+            content: { title: 'Test', body: 'Notification locale' },
+            trigger: null,
+          })
+        }
       >
         Tester la notification
       </Button>
