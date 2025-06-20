@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList } from 'react-native';
+import { Button } from 'react-native-paper';
+import { router } from 'expo-router';
 import { db, auth } from '../../firebase.config';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 
@@ -28,13 +30,32 @@ export default function Dashboard() {
 
   return (
     <View className="flex-1 bg-secondary p-4">
+      <Button
+        mode="contained"
+        style={{ backgroundColor: '#1C3F39', marginBottom: 10 }}
+        onPress={() => router.push('/(orthophonist)/CreateProgramme')}
+      >
+        Créer un programme
+      </Button>
       <Text className="text-lg font-bold mb-4">Mes Patients</Text>
       <FlatList
         data={patients}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View className="p-3 bg-primary mb-2 rounded-xl">
+          <View className="p-3 bg-primary mb-2 rounded-xl flex-row justify-between items-center">
             <Text className="text-secondary">{item.name}</Text>
+            <Button
+              mode="contained"
+              style={{ backgroundColor: '#1C3F39' }}
+              onPress={() =>
+                router.push({
+                  pathname: '/(orthophonist)/PatientDetails',
+                  params: { patientId: item.id },
+                })
+              }
+            >
+              Voir
+            </Button>
           </View>
         )}
         ListEmptyComponent={<Text>Aucun patient</Text>}

@@ -6,6 +6,7 @@ export default function OrthophonistLayout() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Dashboard" />
       <Stack.Screen name="CreateProgramme" />
+      <Stack.Screen name="PatientDetails" />
     </Stack>
   );
 }
