@@ -119,6 +119,14 @@ function RootLayoutNav() {
                 animation: "slide_from_right",
               }}
             />
+            <Stack.Screen
+              name="(orthophonist)/Dashboard"
+              options={{ headerShown: false, animation: "fade" }}
+            />
+            <Stack.Screen
+              name="(orthophonist)/Program"
+              options={{ headerShown: false, animation: "slide_from_right" }}
+            />
             {/* <Stack.Screen name="(drawer)/(tabs)" options={{ headerShown: false }} /> */}
             <Stack.Screen name="modal" options={{ presentation: "modal" }} />
             <Stack.Screen
