@@ -5,7 +5,7 @@ import { TextInput, Button } from 'react-native-paper';
 import { Select, Box } from 'native-base';
 import { db, auth } from '../../firebase.config';
 import { collection, query, where, getDocs, setDoc, doc } from 'firebase/firestore';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 
 interface Patient {
   id: string;
@@ -13,6 +13,7 @@ interface Patient {
 }
 
 export default function CreateProgramme() {
+  const { patientId } = useLocalSearchParams<{ patientId?: string }>();
   const [patients, setPatients] = useState<Patient[]>([]);
   const [selectedPatient, setSelectedPatient] = useState<string>('');
   const [days, setDays] = useState({
@@ -37,6 +38,9 @@ export default function CreateProgramme() {
       const list: Patient[] = [];
       snap.forEach((d) => list.push({ id: d.id, name: d.data().name }));
       setPatients(list);
+      if (patientId) {
+        setSelectedPatient(patientId as string);
+      }
     };
     fetchPatients();
   }, []);
@@ -75,6 +79,7 @@ export default function CreateProgramme() {
             borderWidth={2}
             borderRadius={6}
             dropdownIconPosition="right"
+            isDisabled={!!patientId}
           >
             {patients.map((p) => (
               <Select.Item key={p.id} label={p.name} value={p.id} />
