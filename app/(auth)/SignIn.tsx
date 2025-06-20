@@ -9,8 +9,9 @@ import { IoIosArrowBack } from "react-icons/io";
 import { IoChevronBack } from "react-icons/io5";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { auth } from "../../firebase.config";
+import { auth, db } from "../../firebase.config";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -29,9 +30,11 @@ const SignIn = () => {
   const handleSignIn = () => {
     setIsLoading(true);
     signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
+      .then(async (credential) => {
         console.log("User signed in!");
-        router.push("/(drawer)/(Home)/HomePage");
+        const snap = await getDoc(doc(db, "users", credential.user.uid));
+        const role = snap.data()?.role;
+        router.push(role === "orthophonist" ? "/(orthophonist)/Dashboard" : "/(patient)/Dashboard");
         setIsLoading(false);
       })
       .catch((error) => {
