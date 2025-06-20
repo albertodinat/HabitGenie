@@ -8,6 +8,7 @@ interface Appointment {
   date: string;
   time: string;
   lieu: string;
+  motif: string;
   orthophonistId: string;
   orthophonistName: string;
 }
@@ -32,6 +33,7 @@ export default function Appointments() {
           date: data.date,
           time: data.time,
           lieu: data.lieu,
+          motif: data.motif || '',
           orthophonistId: data.orthophonistId,
           orthophonistName: orthoSnap.data()?.name || '',
         });
@@ -50,11 +52,21 @@ export default function Appointments() {
         data={appointments}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View className="p-3 bg-primary mb-2 rounded-xl">
+          <View
+            className="p-3 mb-2 rounded-xl"
+            style={{
+              backgroundColor:
+                new Date(item.date).getTime() - Date.now() < 7 * 24 * 60 * 60 * 1000 &&
+                new Date(item.date).getTime() - Date.now() > 0
+                  ? '#d4f0d2'
+                  : '#1C3F39',
+            }}
+          >
             <Text className="text-secondary">
               {item.date} {item.time}
             </Text>
             <Text className="text-secondary">Lieu : {item.lieu}</Text>
+            <Text className="text-secondary">Motif : {item.motif}</Text>
             <Text className="text-secondary">
               Orthophoniste : {item.orthophonistName}
             </Text>

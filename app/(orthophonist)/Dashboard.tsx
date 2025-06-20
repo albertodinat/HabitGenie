@@ -3,7 +3,7 @@ import { View, Text, FlatList } from 'react-native';
 import { Button } from 'react-native-paper';
 import { router } from 'expo-router';
 import { db, auth } from '../../firebase.config';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, getDoc, doc } from 'firebase/firestore';
 
 interface Patient {
   id: string;
@@ -11,10 +11,16 @@ interface Patient {
 }
 
 export default function Dashboard() {
+  const [firstName, setFirstName] = useState('');
   const [patients, setPatients] = useState<Patient[]>([]);
 
   useEffect(() => {
     const fetchPatients = async () => {
+      const uid = auth.currentUser?.uid;
+      if (uid) {
+        const snapUser = await getDoc(doc(db, 'users', uid));
+        setFirstName(snapUser.data()?.name?.split(' ')[0] || '');
+      }
       const q = query(
         collection(db, 'users'),
         where('role', '==', 'patient'),
@@ -30,6 +36,9 @@ export default function Dashboard() {
 
   return (
     <View className="flex-1 bg-secondary p-4">
+      {firstName ? (
+        <Text className="text-lg font-bold mb-2">Bonjour {firstName} !</Text>
+      ) : null}
       <Button
         mode="contained"
         style={{ backgroundColor: '#1C3F39', marginBottom: 10 }}
@@ -60,6 +69,9 @@ export default function Dashboard() {
         )}
         ListEmptyComponent={<Text>Aucun patient</Text>}
       />
+      <Button mode="contained" style={{ backgroundColor: '#1C3F39', marginTop: 10 }} onPress={() => router.push('/(Screens)/Settings')}>
+        Paramètres
+      </Button>
     </View>
   );
 }

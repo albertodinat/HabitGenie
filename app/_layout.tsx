@@ -10,11 +10,12 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
 import React from "react";
-import { useColorScheme } from "../components/useColorScheme";
+import { useThemeScheme } from "./Contexts/ThemeContext";
 import { Pressable, StatusBar } from "react-native";
 import Colors from "../constants/Colors";
 import { extendTheme, NativeBaseProvider } from "native-base";
 import { DateProvider } from "./Contexts/GlobalDateContext";
+import { ThemeProviderCustom, useThemeScheme } from "./Contexts/ThemeContext";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -50,15 +51,19 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
+  return (
+    <ThemeProviderCustom>
+      <RootLayoutNav />
+    </ThemeProviderCustom>
+  );
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
+  const { scheme } = useThemeScheme();
 
   return (
     <DateProvider>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <ThemeProvider value={scheme === "dark" ? DarkTheme : DefaultTheme}>
         <StatusBar backgroundColor="#1C3F39" barStyle="dark-content" />
 
         <NativeBaseProvider
@@ -126,6 +131,10 @@ function RootLayoutNav() {
                 presentation: "containedModal",
                 animation: "slide_from_right",
               }}
+            />
+            <Stack.Screen
+              name="(Screens)/Settings"
+              options={{ headerShown: false, presentation: "card" }}
             />
             {/* <Stack.Screen name="(drawer)/(tabs)" options={{ headerShown: false }} /> */}
             <Stack.Screen name="modal" options={{ presentation: "modal" }} />
