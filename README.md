@@ -58,15 +58,34 @@ Clone the repository and start tracking your habits today!
 
 ```bash
 git clone https://github.com/your-repository/habit-tracker-app.git
+```
+
+### Configuration
+Create a `.env` file from the provided example and adjust the settings:
+
+```bash
+cp .env.example .env
+```
+
+The `.env` file contains the `ENABLE_NOTIFICATIONS` variable. Set it to `true` to allow Firebase Functions to send Expo push notifications or `false` to disable them.
 
 ## 🔔 Push Notifications
 
-The project uses Expo push notifications triggered by Firebase Functions. Set `ENABLE_NOTIFICATIONS` in a `.env` file to enable or disable them:
+The project uses Expo push notifications triggered by Firebase Functions.
 
 ```bash
 ENABLE_NOTIFICATIONS=true
 ```
 
 When testing, create an appointment scheduled within the next 10 minutes. The function will immediately trigger the reminder scheduled for **-3h** so you can verify the notifications.
+
+## 🧪 Tests
+
+Jest is used for unit tests. Install the dependencies and run the test suite with:
+
+```bash
+npm install
+npm test
+```
 
 
