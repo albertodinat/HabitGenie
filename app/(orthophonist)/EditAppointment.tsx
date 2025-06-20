@@ -6,6 +6,8 @@ import { Select, Box } from 'native-base';
 import { router, useLocalSearchParams } from 'expo-router';
 import { db, auth } from '../../firebase.config';
 import { doc, getDoc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import * as Notifications from 'expo-notifications';
+import { sendPushNotification } from '../../utils/sendNotification';
 
 interface Patient {
   id: string;
@@ -57,6 +59,23 @@ export default function EditAppointment() {
         time,
         lieu,
       });
+      const snap = await getDoc(doc(db, 'users', selectedPatient));
+      const token = snap.data()?.pushToken;
+      if (token) {
+        await sendPushNotification(
+          token,
+          'Mise à jour rendez-vous',
+          `Rappel : rendez-vous prévu le ${date} à ${time}`
+        );
+        const appointmentDate = new Date(`${date}T${time}`);
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: 'Rappel de rendez-vous',
+            body: `Rappel : rendez-vous prévu le ${date} à ${time}`,
+          },
+          trigger: appointmentDate,
+        });
+      }
       Alert.alert('Rendez-vous mis à jour');
       router.back();
     } catch (e) {

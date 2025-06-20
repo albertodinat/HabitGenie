@@ -5,7 +5,9 @@ import { TextInput, Button } from 'react-native-paper';
 import { Select, Box } from 'native-base';
 import { router } from 'expo-router';
 import { db, auth } from '../../firebase.config';
-import { collection, query, where, getDocs, addDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc, doc, getDoc } from 'firebase/firestore';
+import * as Notifications from 'expo-notifications';
+import { sendPushNotification } from '../../utils/sendNotification';
 
 interface Patient {
   id: string;
@@ -49,6 +51,23 @@ export default function CreateAppointment() {
         time,
         lieu,
       });
+      const snap = await getDoc(doc(db, 'users', selectedPatient));
+      const token = snap.data()?.pushToken;
+      if (token) {
+        await sendPushNotification(
+          token,
+          'Nouveau rendez-vous',
+          `Rappel : rendez-vous prévu le ${date} à ${time}`
+        );
+        const appointmentDate = new Date(`${date}T${time}`);
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: 'Rappel de rendez-vous',
+            body: `Rappel : rendez-vous prévu le ${date} à ${time}`,
+          },
+          trigger: appointmentDate,
+        });
+      }
       Alert.alert('Rendez-vous créé');
       router.back();
     } catch (e) {

@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Switch } from 'react-native';
+import { View, Text, Switch, Alert } from 'react-native';
 import { Button } from 'react-native-paper';
 import { router } from 'expo-router';
 import { db, auth } from '../../firebase.config';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import dayjs from 'dayjs';
+import usePushToken from '../../hooks/usePushToken';
+import { sendPushNotification } from '../../utils/sendNotification';
 
 export default function Dashboard() {
+  usePushToken();
   const [programme, setProgramme] = useState<any>(null);
   const [completedDays, setCompletedDays] = useState<{ [key: string]: boolean }>(
     {}
@@ -67,6 +70,19 @@ export default function Dashboard() {
         onPress={() => router.push('/(patient)/Appointments')}
       >
         Mes rendez-vous
+      </Button>
+      <Button
+        mode="contained"
+        style={{ backgroundColor: '#1C3F39', marginTop: 10 }}
+        onPress={async () => {
+          const token = (await getDoc(doc(db, 'users', auth.currentUser?.uid || ''))).data()?.pushToken;
+          if (token) {
+            await sendPushNotification(token, 'Test', 'Ceci est une notification de test');
+            Alert.alert('Notification envoyée');
+          }
+        }}
+      >
+        Tester la notification
       </Button>
     </View>
   );
