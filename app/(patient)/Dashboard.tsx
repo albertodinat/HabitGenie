@@ -5,15 +5,52 @@ import { router } from 'expo-router';
 import { db, auth } from '../../firebase.config';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import dayjs from 'dayjs';
-import usePushToken from '../../hooks/usePushToken';
+import * as Notifications from 'expo-notifications';
+import * as Device from 'expo-device';
 import { sendPushNotification } from '../../utils/sendNotification';
 
 export default function Dashboard() {
-  usePushToken();
   const [programme, setProgramme] = useState<any>(null);
   const [completedDays, setCompletedDays] = useState<{ [key: string]: boolean }>(
     {}
   );
+
+  useEffect(() => {
+    let sub: Notifications.Subscription | undefined;
+    const register = async () => {
+      if (!Device.isDevice) return;
+      const { status: existing } = await Notifications.getPermissionsAsync();
+      let final = existing;
+      if (existing !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        final = status;
+      }
+      if (final !== 'granted') {
+        Alert.alert('Notifications refusées', 'Vous ne recevrez pas de rappels');
+        return;
+      }
+
+      const tokenData = await Notifications.getExpoPushTokenAsync();
+      const uid = auth.currentUser?.uid;
+      if (uid) {
+        await setDoc(
+          doc(db, 'users', uid),
+          { pushToken: tokenData.data },
+          { merge: true }
+        );
+      }
+
+      sub = Notifications.addNotificationReceivedListener((notification) => {
+        const title = notification.request.content.title || 'Notification';
+        const body = notification.request.content.body || '';
+        Alert.alert(title, body);
+      });
+    };
+    register();
+    return () => {
+      sub?.remove();
+    };
+  }, []);
 
   useEffect(() => {
     const fetchProgramme = async () => {
