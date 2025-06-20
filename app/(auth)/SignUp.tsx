@@ -1,19 +1,21 @@
-import { View, Text, TouchableOpacity, Alert } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { HelperText, TextInput } from "react-native-paper";
+import { HelperText, TextInput, RadioButton } from "react-native-paper";
 import { useState } from "react";
 import CustomButton from "../../components/CustomButton";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { auth } from "../../firebase.config";
-import { createUserWithEmailAndPassword, updateProfile, UserCredential } from "firebase/auth";
+import { auth, db } from "../../firebase.config";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
+  const [role, setRole] = useState("patient");
   const [isLoading, setIsLoading] = useState(false);
   const [signUpClicked, setSignUpClicked] = useState(false);
   const [emailError, setEmailError] = useState(false);
@@ -34,9 +36,15 @@ const SignUp = () => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password)
       .then(async (res) => {
         console.log("User account created & signed in!");
-        router.push("/(drawer)/(Home)/HomePage");
+        await updateProfile(res.user, { displayName: name });
+        await setDoc(doc(db, "users", res.user.uid), {
+          name,
+          email,
+          role,
+        });
+        router.push(role === "orthophonist" ? "/(orthophonist)/Dashboard" : "/(patient)/Dashboard");
         setIsLoading(false);
-        return res
+        return res;
       })
       .catch((error) => {
         if (error.code === "auth/email-already-in-use") {
@@ -59,9 +67,6 @@ const SignUp = () => {
         setIsLoading(false);
         console.log(error.code)
       });
-    if (userCredential) {
-      await updateProfile((userCredential as UserCredential).user, { displayName: name })
-    }
   };
 
   return (
@@ -148,15 +153,27 @@ const SignUp = () => {
               left={<TextInput.Icon icon="lock" size={20} disabled />}
               secureTextEntry={!showPass}
             />
-            {passwordError && <HelperText type="error" visible={passwordError} className="font-semibold">
-              {passwordErrorMessage}
-            </HelperText>}
-          </View>
-          <CustomButton
-            title="Sign Up"
-            handlePress={handlePress}
-            ContainerStyles={"w-full px-2 rounded-3xl mt-6"}
-            textStyles={"text-secondary"}
+          {passwordError && <HelperText type="error" visible={passwordError} className="font-semibold">
+            {passwordErrorMessage}
+          </HelperText>}
+        </View>
+        <View className="w-full flex flex-row justify-around items-center mt-2">
+          <RadioButton.Group onValueChange={value => setRole(value)} value={role}>
+            <View className="flex-row items-center">
+              <RadioButton value="orthophonist" />
+              <Text>Orthophoniste</Text>
+            </View>
+            <View className="flex-row items-center">
+              <RadioButton value="patient" />
+              <Text>Patient</Text>
+            </View>
+          </RadioButton.Group>
+        </View>
+        <CustomButton
+          title="Sign Up"
+          handlePress={handlePress}
+          ContainerStyles={"w-full px-2 rounded-3xl mt-6"}
+          textStyles={"text-secondary"}
             isLoading={isLoading}
           />
         </View>

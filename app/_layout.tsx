@@ -80,6 +80,14 @@ function RootLayoutNav() {
               options={{ headerShown: false, animation: "fade" }}
             />
             <Stack.Screen
+              name="(orthophonist)"
+              options={{ headerShown: false, animation: "fade" }}
+            />
+            <Stack.Screen
+              name="(patient)"
+              options={{ headerShown: false, animation: "fade" }}
+            />
+            <Stack.Screen
               name="(Screens)/Profile"
               options={{
                 headerShown: false,
