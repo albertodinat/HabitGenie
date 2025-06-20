@@ -7,6 +7,9 @@ export default function OrthophonistLayout() {
       <Stack.Screen name="Dashboard" />
       <Stack.Screen name="CreateProgramme" />
       <Stack.Screen name="PatientDetails" />
+      <Stack.Screen name="Appointments" />
+      <Stack.Screen name="CreateAppointment" />
+      <Stack.Screen name="EditAppointment" />
     </Stack>
   );
 }
