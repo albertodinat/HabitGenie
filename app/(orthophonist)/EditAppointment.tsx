@@ -21,6 +21,7 @@ export default function EditAppointment() {
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [lieu, setLieu] = useState('');
+  const [motif, setMotif] = useState('');
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -32,6 +33,7 @@ export default function EditAppointment() {
       setDate(data?.date || '');
       setTime(data?.time || '');
       setLieu(data?.lieu || '');
+      setMotif(data?.motif || '');
 
       const q = query(
         collection(db, 'users'),
@@ -47,7 +49,7 @@ export default function EditAppointment() {
   }, [id]);
 
   const handleUpdate = async () => {
-    if (!id || !selectedPatient || !date || !time || !lieu) {
+    if (!id || !selectedPatient || !date || !time || !lieu || !motif) {
       Alert.alert('Veuillez remplir tous les champs');
       return;
     }
@@ -58,6 +60,7 @@ export default function EditAppointment() {
         date,
         time,
         lieu,
+        motif,
       });
       const snap = await getDoc(doc(db, 'users', selectedPatient));
       const token = snap.data()?.pushToken;
@@ -126,6 +129,15 @@ export default function EditAppointment() {
           label="Lieu"
           value={lieu}
           onChangeText={setLieu}
+          mode="outlined"
+          className="mb-2 bg-secondary"
+          outlineColor="#1C3F39"
+          activeOutlineColor="#1C3F39"
+        />
+        <TextInput
+          label="Motif"
+          value={motif}
+          onChangeText={setMotif}
           mode="outlined"
           className="mb-2 bg-secondary"
           outlineColor="#1C3F39"

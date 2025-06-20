@@ -12,6 +12,7 @@ interface Appointment {
   date: string;
   time: string;
   lieu: string;
+  motif: string;
   patientId: string;
   patientName: string;
 }
@@ -21,6 +22,7 @@ export default function Appointments() {
   const [patients, setPatients] = useState<{ id: string; name: string }[]>([]);
   const [filterPatient, setFilterPatient] = useState('');
   const [filterDate, setFilterDate] = useState('');
+  const [showPast, setShowPast] = useState(false);
 
   const fetchAppointments = async () => {
     if (!auth.currentUser) return;
@@ -38,6 +40,7 @@ export default function Appointments() {
         date: data.date,
         time: data.time,
         lieu: data.lieu,
+        motif: data.motif || '',
         patientId: data.patientId,
         patientName: patientSnap.data()?.name || '',
       });
@@ -80,7 +83,9 @@ export default function Appointments() {
   const filteredAppointments = appointments.filter((a) => {
     const matchPatient = !filterPatient || a.patientId === filterPatient;
     const matchDate = !filterDate || a.date === filterDate;
-    return matchPatient && matchDate;
+    const isPast = new Date(a.date).getTime() < new Date().setHours(0,0,0,0);
+    const matchPast = showPast ? isPast : !isPast;
+    return matchPatient && matchDate && matchPast;
   });
 
   return (
@@ -115,15 +120,34 @@ export default function Appointments() {
         onChangeText={setFilterDate}
         style={{ borderColor: '#1C3F39', borderWidth: 1, borderRadius: 6, padding: 8, marginBottom: 10 }}
       />
+      <View className="flex-row mb-2">
+        <Button mode="contained" style={{backgroundColor:'#1C3F39'}} onPress={() => setShowPast(false)}>
+          À venir
+        </Button>
+        <View style={{width:10}} />
+        <Button mode="contained" style={{backgroundColor:'#1C3F39'}} onPress={() => setShowPast(true)}>
+          Passés
+        </Button>
+      </View>
       <FlatList
         data={filteredAppointments}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View className="p-3 bg-primary mb-2 rounded-xl">
+          <View
+            className="p-3 mb-2 rounded-xl"
+            style={{
+              backgroundColor:
+                new Date(item.date).getTime() - Date.now() < 7 * 24 * 60 * 60 * 1000 &&
+                new Date(item.date).getTime() - Date.now() > 0
+                  ? '#d4f0d2'
+                  : '#1C3F39',
+            }}
+          >
             <Text className="text-secondary">
               {item.date} {item.time}
             </Text>
             <Text className="text-secondary">Lieu : {item.lieu}</Text>
+            <Text className="text-secondary">Motif : {item.motif}</Text>
             <Text className="text-secondary">Patient : {item.patientName}</Text>
             <View className="flex-row mt-2 space-x-2">
               <Button
