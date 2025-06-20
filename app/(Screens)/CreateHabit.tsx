@@ -15,7 +15,7 @@ const CreateHabit = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [habitName, setHabitName] = useState("");
-  const [habitTime, setHabitTime] = useState<number | null>(null);
+  const [habitTime, setHabitTime] = useState<string | null>(null);
   const [habitFrequency, setHabitFrequency] = useState("daily");
   const [habitUoM, setHabitUoM] = useState<string | null>(null);
   const [habitQuantity, setHabitQuantity] = useState<number | null>(null);
@@ -212,7 +212,7 @@ const CreateHabit = () => {
                 mode="time"
                 onChange={(_, date) => {
                   setTimePickerVisible(false);
-                  setHabitTime(date ? date.getTime() : null);
+                  setHabitTime(date ? date.toISOString().slice(0, 16) : null);
                 }}
                 value={habitTime ? new Date(habitTime) : new Date()}
               ></DateTimePicker>

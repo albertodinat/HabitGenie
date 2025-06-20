@@ -22,7 +22,7 @@ const EditHabitDetails = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const [habitName, setHabitName] = useState(selectedHabit.name);
-  const [habitTime, setHabitTime] = useState<number | null>(selectedHabit.time);
+  const [habitTime, setHabitTime] = useState<string | null>(selectedHabit.time);
   const [habitFrequency, setHabitFrequency] = useState(selectedHabit.frequency);
   const [habitUoM, setHabitUoM] = useState<string | null>(selectedHabit.uom);
   const [habitQuantity, setHabitQuantity] = useState<number | null>(
@@ -291,7 +291,7 @@ const EditHabitDetails = ({
                 mode="time"
                 onChange={(_, date) => {
                   setTimePickerVisible(false);
-                  setHabitTime(date ? date.getTime() : null);
+                  setHabitTime(date ? date.toISOString().slice(0, 16) : null);
                 }}
                 value={habitTime ? new Date(habitTime) : new Date()}
               ></DateTimePicker>
