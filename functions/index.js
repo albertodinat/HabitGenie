@@ -3,6 +3,7 @@ const admin = require('firebase-admin');
 const fetch = require('node-fetch');
 
 admin.initializeApp();
+const db = admin.firestore();
 
 const ENABLE_NOTIFICATIONS =
   process.env.ENABLE_NOTIFICATIONS === undefined ||
@@ -123,5 +124,55 @@ exports.onDeleteAppointment = functions.firestore
   .onDelete(async (snap, context) => {
     clearTimers(context.params.id);
     console.log('Appointment deleted', context.params.id);
+    return null;
+  });
+
+exports.sendReminders = functions.pubsub
+  .schedule('every day 08:00')
+  .timeZone('Europe/Paris')
+  .onRun(async () => {
+    const usersSnap = await db
+      .collection('users')
+      .where('role', '==', 'patient')
+      .get();
+    const today = new Date().toISOString().split('T')[0];
+
+    const messages = [];
+
+    for (const userDoc of usersSnap.docs) {
+      const user = userDoc.data();
+      const uid = userDoc.id;
+      const token = user.pushToken;
+
+      if (!token) continue;
+
+      const programmeDoc = await db.collection('programmes').doc(uid).get();
+      const suiviDoc = await db.collection('suivi').doc(uid).get();
+      const suivi = suiviDoc.exists ? suiviDoc.data()[today] : null;
+
+      if (programmeDoc.exists && !suivi) {
+        messages.push({
+          to: token,
+          sound: 'default',
+          title: 'Rappel Orthoges',
+          body: "N'oublie pas de faire tes exercices du jour ! 😊",
+        });
+      }
+    }
+
+    const chunks = [];
+    const batchSize = 50;
+    for (let i = 0; i < messages.length; i += batchSize) {
+      chunks.push(messages.slice(i, i + batchSize));
+    }
+
+    for (const chunk of chunks) {
+      await fetch('https://exp.host/--/api/v2/push/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(chunk),
+      });
+    }
+
     return null;
   });
