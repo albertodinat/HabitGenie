@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Divider } from "react-native-paper";
@@ -10,6 +10,7 @@ import { auth, handleLogout } from "../../firebase.config";
 const Profile = () => {
   const Name = auth.currentUser?.displayName;
   const Email = auth.currentUser?.email;
+  const Photo = auth.currentUser?.photoURL;
   const Colors = [
     "bg-[#F4E6FA]",
     "bg-[#F8F9DC]",
@@ -56,12 +57,19 @@ const Profile = () => {
           </View>
           <View
             className={`h-40 w-40 rounded-full border-4 border-white items-center justify-center ${
-              Colors[Math.floor(Math.random() * 10)]
+              Photo ? "" : Colors[Math.floor(Math.random() * 10)]
             }`}
           >
-            <Text className="text-[60px] font-black text-primary">
-              {renderName()}
-            </Text>
+            {Photo ? (
+              <Image
+                source={{ uri: Photo }}
+                className="h-full w-full rounded-full"
+              />
+            ) : (
+              <Text className="text-[60px] font-black text-primary">
+                {renderName()}
+              </Text>
+            )}
           </View>
           <View className="flex items-center justify-center gap-y-1">
             <Text className="text-2xl text-secondary font-semibold">

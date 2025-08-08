@@ -1,6 +1,6 @@
 import React from "react";
 import { Drawer } from "expo-router/drawer";
-import { Pressable, useColorScheme } from "react-native";
+import { Pressable, useColorScheme, Image } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link } from "expo-router";
 import { auth } from "../../firebase.config";
@@ -34,12 +34,25 @@ export default function DrawerLayout({ children }: any) {
             <Link href="/(Screens)/Profile" asChild>
               <Pressable>
                 {({ pressed }) => (
-                  <FontAwesome
-                    name="user-circle"
-                    size={25}
-                    color="#EEE7D3"
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
+                  auth.currentUser?.photoURL ? (
+                    <Image
+                      source={{ uri: auth.currentUser.photoURL }}
+                      style={{
+                        width: 25,
+                        height: 25,
+                        borderRadius: 12.5,
+                        marginRight: 15,
+                        opacity: pressed ? 0.5 : 1,
+                      }}
+                    />
+                  ) : (
+                    <FontAwesome
+                      name="user-circle"
+                      size={25}
+                      color="#EEE7D3"
+                      style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                    />
+                  )
                 )}
               </Pressable>
             </Link>
